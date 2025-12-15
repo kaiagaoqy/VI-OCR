@@ -11,3 +11,8 @@ py39/
 .vscode/
 filtered/
 output/
+
+.env
+.DS_Store
+.history/
+**/_pycache/
