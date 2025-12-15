@@ -1,0 +1,13 @@
+**/pretrained_model.pth
+data/totaltext/
+viocrvenv/
+venv/
+**.pth
+# **/Union14M-main/**
+data/viocr/
+data/*
+torch26/
+py39/
+.vscode/
+filtered/
+output/
