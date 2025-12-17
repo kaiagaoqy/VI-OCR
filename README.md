@@ -376,24 +376,6 @@ python batch_process_subjects.py \
     ...
 ```
 
-### Resume After Interruption
-
-```bash
-# Processing will automatically skip completed (subject, image) pairs
-python batch_process_subjects.py \
-    --model_type dsocr \
-    --output_dir outputs/dsocr_results \
-    ...
-# Interrupted? Just run the same command again!
-```
-
-### Disable Resume
-
-```bash
-python batch_process_subjects.py \
-    --no_resume \
-    ...
-```
 
 ## Contributing
 
