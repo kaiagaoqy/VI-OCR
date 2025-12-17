@@ -6,12 +6,10 @@
 - **6 Vision Models Supported**: DeepSeek OCR, Qwen2.5-VL, Gemini, Claude, GPT-4, CogVLM
 - **Automatic Low-Vision Filtering**: Apply perceptual filters based on VA (Visual Acuity) and CS (Contrast Sensitivity)
 - **Subject-Specific Processing**: Each subject has unique vision parameters (hshift/vshift)
-- **Shared Filtered Images**: Efficient storage - filter once, reuse across all models
-- **Batch Processing**: Process multiple subjects and images automatically
-- **Resume Support**: Continue processing after interruptions
 - **Flexible Workflows**: Pre-filtered or real-time filtering modes
 
 ## Project Structure
+.csv files can be found in [Google Drive](https://drive.google.com/drive/folders/1KGM7QUfmWB5b11EmS2tBl9LP0CKX-B1A?usp=sharing)
 
 ```
 VIOCR_infer_models/
