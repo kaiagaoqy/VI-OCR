@@ -7,29 +7,30 @@ from PIL import Image
 import anthropic
 import base64
 import os
+import tempfile
 from io import BytesIO
+from typing import Union
 import numpy as np
 
 
 class ClaudeModelInference(BaseModelInference):
     """Wrapper for Claude API models."""
     
-    def __init__(self, model_path: str = "claude-3-5-sonnet-20240620"):
+    def __init__(self, model_path: str = "claude-3-5-sonnet-20240620", **kwargs):
         """
         Initialize Claude model.
         
         Args:
             model_path: Claude model name (e.g., "claude-3-5-sonnet-20240620")
         """
-        super().__init__(model_path)
-        self.model_name = model_path
+        super().__init__(model_path, **kwargs)
         
-    def load_model(self):
+    def _load_model(self, **kwargs):
         """Load Claude client."""
         self.client = anthropic.Anthropic(
             api_key=os.getenv("ANTHROPIC_API_KEY")
         )
-        print(f"✓ Claude client initialized with model: {self.model_name}")
+        print(f"✓ Claude client initialized with model: {self.model_path}")
     
     def encode_image(self, image_path: str) -> str:
         """
@@ -58,26 +59,43 @@ class ClaudeModelInference(BaseModelInference):
             
             return base64.b64encode(img_byte).decode('utf-8')
     
-    def infer(self, image: str, prompt: str, **kwargs) -> str:
+    def infer(self, image: Union[str, np.ndarray, Image.Image], prompt: str, **kwargs) -> str:
         """
         Perform inference using Claude.
         
         Args:
-            image: Path to image file
+            image: Path to image file, numpy array, or PIL Image
             prompt: Text prompt
             **kwargs: Additional arguments (max_tokens, temperature, etc.)
             
         Returns:
             Model output text
         """
-        if not hasattr(self, 'client'):
-            self.load_model()
+        # Client should be loaded in __init__ via _load_model()
+        
+        # Convert to file path if needed
+        if isinstance(image, str):
+            image_path = image
+        elif isinstance(image, np.ndarray):
+            # Save to temp file
+            pil_img = Image.fromarray(image.astype(np.uint8))
+            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
+            pil_img.save(temp_file.name)
+            image_path = temp_file.name
+        elif isinstance(image, Image.Image):
+            # Save to temp file
+            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
+            image.save(temp_file.name)
+            image_path = temp_file.name
+        else:
+            raise ValueError(f"Unsupported image type: {type(image)}")
         
         # Encode image
-        image_base64 = self.encode_image(image)
+        image_base64 = self.encode_image(image_path)
         
-        # Determine media type from file extension
-        postfix = image.split(".")[-1].lower()
+        # Determine media type
+        postfix = image_path.split(".")[-1].lower()
+        
         if postfix == "png":
             media_type = "image/png"
         elif postfix in ["jpg", "jpeg"]:
@@ -111,7 +129,7 @@ class ClaudeModelInference(BaseModelInference):
         temperature = kwargs.get('temperature', 0)
         
         response = self.client.messages.create(
-            model=self.model_name,
+            model=self.model_path,
             max_tokens=max_tokens,
             temperature=temperature,
             system="You are a helpful AI assistant.",
@@ -119,5 +137,14 @@ class ClaudeModelInference(BaseModelInference):
         )
         
         output = response.content[0].text.strip()
+        
+        # Clean up temp file if created
+        if not isinstance(image, str):
+            try:
+                os.remove(image_path)
+            except:
+                pass
+        
         return output
+
 

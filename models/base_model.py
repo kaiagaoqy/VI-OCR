@@ -108,3 +108,6 @@ class BaseModelInference(ABC):
         """
         return self.model_path.split('/')[-1]
 
+
+
+

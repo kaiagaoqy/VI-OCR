@@ -6,6 +6,9 @@ from .base_model import BaseModelInference
 from PIL import Image
 import torch
 import os
+import tempfile
+from typing import Union
+import numpy as np
 from transformers import AutoModelForCausalLM, LlamaTokenizer
 
 
@@ -16,7 +19,8 @@ class CogVLMModelInference(BaseModelInference):
                  tokenizer_path: str = "lmsys/vicuna-7b-v1.5",
                  quant: int = 4,
                  fp16: bool = False,
-                 bf16: bool = False):
+                 bf16: bool = False,
+                 **kwargs):
         """
         Initialize CogVLM model.
         
@@ -27,14 +31,14 @@ class CogVLMModelInference(BaseModelInference):
             fp16: Use FP16 precision
             bf16: Use BF16 precision
         """
-        super().__init__(model_path)
         self.tokenizer_path = tokenizer_path
         self.quant = quant
         self.fp16 = fp16
         self.bf16 = bf16
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        super().__init__(model_path, **kwargs)
         
-    def load_model(self):
+    def _load_model(self, **kwargs):
         """Load CogVLM model and tokenizer."""
         print(f"Loading CogVLM model from {self.model_path}...")
         
@@ -73,23 +77,29 @@ class CogVLMModelInference(BaseModelInference):
         print(f"  Torch type: {torch_type}")
         print(f"  Quantization: {self.quant}-bit" if self.quant else "  No quantization")
     
-    def infer(self, image: str, prompt: str, **kwargs) -> str:
+    def infer(self, image: Union[str, np.ndarray, Image.Image], prompt: str, **kwargs) -> str:
         """
         Perform inference using CogVLM.
         
         Args:
-            image: Path to image file
+            image: Path to image file, numpy array, or PIL Image
             prompt: Text prompt
             **kwargs: Additional arguments (max_length, do_sample, etc.)
             
         Returns:
             Model output text
         """
-        if not hasattr(self, 'model'):
-            self.load_model()
+        # Model should be loaded in __init__ via _load_model()
         
-        # Load image
-        img = Image.open(image).convert('RGB')
+        # Convert to PIL Image
+        if isinstance(image, str):
+            img = Image.open(image).convert('RGB')
+        elif isinstance(image, np.ndarray):
+            img = Image.fromarray(image.astype(np.uint8)).convert('RGB')
+        elif isinstance(image, Image.Image):
+            img = image.convert('RGB')
+        else:
+            raise ValueError(f"Unsupported image type: {type(image)}")
         
         # Build conversation input
         input_by_model = self.model.build_conversation_input_ids(
@@ -125,4 +135,5 @@ class CogVLMModelInference(BaseModelInference):
             output = output.split("</s>")[0].strip().replace(".", "")
         
         return output
+
 

@@ -343,7 +343,7 @@ outputs/
     "cs_measured": 0.85,
     "hshift": 7.0771,
     "vshift": 0.0692,
-    "inference_result": "recognized text here",
+    "rec_texts": "recognized text here",
     "mode": "real-time-filter"
   },
   {
@@ -368,8 +368,8 @@ cat outputs/dsocr_results/Sub123/results.json | jq
 cat outputs/dsocr_results/all_results.json | jq 'length'
 
 # Compare models for same subject
-cat outputs/dsocr_results/Sub123/results.json | jq '.[0].inference_result'
-cat outputs/claude_results/Sub123/results.json | jq '.[0].inference_result'
+cat outputs/dsocr_results/Sub123/results.json | jq '.[0].rec_texts'
+cat outputs/claude_results/Sub123/results.json | jq '.[0].rec_texts'
 ```
 
 ## Advanced Usage
@@ -461,4 +461,7 @@ MODEL_MAP = {
 **Ready to process vision-impaired images at scale! 🚀**
 
 For questions or issues, please refer to the documentation in the `docs/` directory or open an issue.
+
+
+
 

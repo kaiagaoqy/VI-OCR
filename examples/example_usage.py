@@ -313,7 +313,7 @@ def example_7_batch_process_subjects():
                 'hshift': float(hshift),
                 'vshift': float(vshift),
                 'image_path': image_path,
-                'inference_result': result
+                'rec_texts': result
             }
             
             # Save to JSONL (one subject per line)

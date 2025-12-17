@@ -162,7 +162,7 @@ case $model_choice in
         ;;
     3)
         MODEL_TYPE="gemini"
-        MODEL_PATH="gemini-2.5-flash"
+        MODEL_PATH="gemini-2.0-flash"
         ENV_NAME="gemini_env"
         MODEL_SIZE=""
         ;;
@@ -174,7 +174,7 @@ case $model_choice in
         ;;
     5)
         MODEL_TYPE="gpt"
-        MODEL_PATH="gpt-4o"
+        MODEL_PATH="gpt-4o-mini"
         ENV_NAME="gpt_env"
         MODEL_SIZE=""
         ;;
@@ -200,7 +200,7 @@ echo ""
 echo -e "${BLUE}Step 5: Configure Output Directory${NC}"
 echo "------------------------------------------------------------------------"
 
-OUTPUT_DIR="outputs/${MODEL_TYPE}_results"
+OUTPUT_DIR="outputs/${MODEL_PATH##*/}"
 SHARED_FILTERED_DIR="outputs/filtered_images"
 echo "Output directory:          $OUTPUT_DIR"
 echo "Shared filtered images:    $SHARED_FILTERED_DIR"

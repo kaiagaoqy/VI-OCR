@@ -264,7 +264,7 @@ def batch_process_subjects(
                             'cs_measured': cs,
                             'hshift': hshift,
                             'vshift': vshift,
-                            'inference_result': result,
+                            'rec_texts': result,
                             'mode': 'pre-filtered'
                         }
                         
@@ -313,7 +313,7 @@ def batch_process_subjects(
                             'cs_measured': cs,
                             'hshift': hshift,
                             'vshift': vshift,
-                            'inference_result': result,
+                            'rec_texts': result,
                             'mode': 'real-time-filter'
                         }
                         
@@ -400,7 +400,7 @@ def main():
         '--model_type',
         type=str,
         required=True,
-        choices=['qwen2', 'gemini', 'dsocr'],
+        choices=['qwen2', 'gemini', 'dsocr','claude','gpt','cogvlm'],
         help='Type of model to use'
     )
     parser.add_argument(
