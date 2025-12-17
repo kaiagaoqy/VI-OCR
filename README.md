@@ -57,19 +57,6 @@ VIOCR_infer_models/
 ### Installation
 
 ```bash
-# Clone repository
-cd /path/to/VIOCR_infer_models
-
-# Install core dependencies
-pip install opencv-python pillow numpy pandas tqdm python-dotenv
-
-# Install model-specific dependencies (in separate environments)
-# For DeepSeek OCR:
-pip install deepseek-ocr
-
-# For Qwen2:
-pip install transformers torch
-
 # For Gemini:
 pip install google-generativeai
 
@@ -78,9 +65,6 @@ pip install anthropic
 
 # For GPT-4:
 pip install openai
-
-# For CogVLM:
-pip install transformers torch
 ```
 
 ### Environment Setup
@@ -345,7 +329,7 @@ MODEL_MAP = {
 }
 ```
 
-3. Add to `BATCH_PROCESS_EXAMPLE.sh`:
+3. Add to `BATCH_PROCESS.sh`:
 ```bash
 7)
     MODEL_TYPE="yourmodel"
