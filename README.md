@@ -225,6 +225,7 @@ python batch_process_subjects.py \
 ```
 
 ## Usage Examples
+More examples can be found in examples/
 
 ### Example 1: Single Model, Real-time Filtering
 
@@ -237,65 +238,6 @@ python batch_process_subjects.py \
     --img_dir data/totaltext/16 \
     --size Tiny \
     --save_filtered_images
-```
-
-### Example 2: Multiple Models with Shared Filtered Images
-
-```bash
-# Step 1: First model - save filtered images
-python batch_process_subjects.py \
-    --model_type dsocr \
-    --output_dir outputs/dsocr_results \
-    --anno_json data/totaltext/anno.json \
-    --img_dir data/totaltext/16 \
-    --save_filtered_images
-
-# Step 2: Other models - reuse filtered images (fast!)
-python batch_process_subjects.py \
-    --model_type claude \
-    --model_path claude-3-5-sonnet-20240620 \
-    --output_dir outputs/claude_results \
-    --filtered_image_dir outputs/filtered_images
-
-python batch_process_subjects.py \
-    --model_type gpt \
-    --model_path gpt-4o \
-    --output_dir outputs/gpt_results \
-    --filtered_image_dir outputs/filtered_images
-```
-
-### Example 3: Python API
-
-```python
-from inference_pipeline import FilteredInferencePipeline
-
-# Initialize pipeline
-pipeline = FilteredInferencePipeline(
-    model_type='dsocr',
-    model_path='deepseek-ai/DeepSeek-OCR',
-    model_size='Tiny'
-)
-
-# Infer with automatic filtering
-result = pipeline.infer_single_image(
-    image_path='path/to/image.jpg',
-    prompt='Extract all text',
-    hshift=7.0771,
-    vshift=0.0692
-)
-
-print(result)
-```
-
-### Example 4: Subject-Specific Parameters
-
-```python
-from utils.image_processor import ImageFilterProcessor
-
-# Get parameters for a specific subject
-hshift, vshift = ImageFilterProcessor.get_shifts_for_subject('Sub123')
-
-print(f"Subject Sub123 parameters: hshift={hshift}, vshift={vshift}")
 ```
 
 ## 📊 Output Format
