@@ -49,8 +49,7 @@ VIOCR_infer_models/
 │
 ├── inference_pipeline.py            # Main inference orchestration
 ├── batch_process_subjects.py        # Batch processing script
-├── BATCH_PROCESS_EXAMPLE.sh         # Interactive workflow script
-└── docs/                            # Documentation
+└── BATCH_PROCESS.sh         # Interactive workflow script
 ```
 
 ## Quick Start
@@ -355,23 +354,6 @@ outputs/
 ]
 ```
 
-### Viewing Results
-
-```bash
-# View all results
-cat outputs/dsocr_results/all_results.json | jq
-
-# View specific subject
-cat outputs/dsocr_results/Sub123/results.json | jq
-
-# Count total results
-cat outputs/dsocr_results/all_results.json | jq 'length'
-
-# Compare models for same subject
-cat outputs/dsocr_results/Sub123/results.json | jq '.[0].rec_texts'
-cat outputs/claude_results/Sub123/results.json | jq '.[0].rec_texts'
-```
-
 ## Advanced Usage
 
 ### Custom Prompts
@@ -448,20 +430,16 @@ MODEL_MAP = {
     ;;
 ```
 
-## License
 
-[Specify your license here]
-
-## Contact
-
-[Your contact information]
-
----
-
-**Ready to process vision-impaired images at scale! 🚀**
-
-For questions or issues, please refer to the documentation in the `docs/` directory or open an issue.
-
-
+## Cite Us
+```bibtex
+@article{gao2025vi,
+  title={VI-OCR:“Visually Impaired” optical character recognition pipeline for text accessibility assessment},
+  author={Gao, Qingying and Manduchi, Roberto and Ramulu, Pradeep Y and Legge, Gordon E and Xiong, Yingzi},
+  journal={Scientific Reports},
+  year={2025},
+  publisher={Nature Publishing Group}
+}
+```
 
 
